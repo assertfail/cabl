@@ -32,6 +32,7 @@ Coordinator::~Coordinator()
   m_running = false;
   if (m_cablThread.joinable())
   {
+    M_LOG("Wating for thread to join");
     m_cablThread.join();
   }
 }
@@ -81,7 +82,9 @@ void Coordinator::run()
           //! \todo Check tick() result
         }
       }
+      std::this_thread::sleep_for( std::chrono::microseconds(5000));
       std::this_thread::yield();
+
     }
   });
 }
