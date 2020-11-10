@@ -69,7 +69,6 @@ enum class MaschineMikroMK2::Led : uint8_t
   Select,
   Solo,
   Mute,
-
   Pad13, Pad13R = Pad13, Pad13G, Pad13B,
   Pad14, Pad14R = Pad14, Pad14G, Pad14B,
   Pad15, Pad15R = Pad15, Pad15G, Pad15B,
@@ -299,6 +298,7 @@ void MaschineMikroMK2::processButtons(const Transfer& input_)
       Button currentButton(static_cast<Button>(btn));
       if (currentButton == Button::Shift)
       {
+        m_buttonStates[btn] = isButtonPressed(input_, currentButton);
         continue;
       }
       buttonPressed = isButtonPressed(input_, currentButton);
@@ -337,13 +337,15 @@ void MaschineMikroMK2::processPads(const Transfer& input_)
     unsigned l = input_[i];
     unsigned h = input_[i + 1];
     uint8_t pad = (h & 0xF0) >> 4;
-    m_padsData[pad] = (((h & 0x0F) << 8) | l);
+    unsigned prev = m_padsData[pad];
+
+    m_padsData[pad] = (((h & 0x0F) << 8) | l);    
 
     if (m_padsData[pad] > kMikroMK2_padThreshold)
     {
       m_padsStatus[pad] = true;
       keyChanged(
-        pad, m_padsData[pad] / 1024.0, m_buttonStates[static_cast<uint8_t>(Button::Shift)]);
+        pad, m_padsData[pad] / 4096.0, m_buttonStates[static_cast<uint8_t>(Button::Shift)]);
     }
     else
     {
