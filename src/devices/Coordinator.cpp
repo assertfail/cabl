@@ -82,7 +82,6 @@ void Coordinator::run()
           //! \todo Check tick() result
         }
       }
-      std::this_thread::sleep_for( std::chrono::microseconds(5000));
       std::this_thread::yield();
 
     }
