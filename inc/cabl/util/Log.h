@@ -8,9 +8,10 @@
 #pragma once
 
 #if defined(NDEBUG)
+/*
 #define M_LOG(msg)
 #else
-
+*/
 /*
 See: http://stackoverflow.com/questions/19415845/a-better-log-macro-using-template-metaprogramming
 */
